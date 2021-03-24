@@ -1,6 +1,7 @@
 package utils;
 
 
+import entities.Post;
 import entities.Role;
 import entities.User;
 
@@ -23,6 +24,13 @@ public class SetupTestUsers {
     User user = new User("user", "test1");
     User admin = new User("admin", "test2");
     User both = new User("user_admin", "test3");
+    
+    Post post1 = new Post("Test content i post", user);
+    Post post2 = new Post("Test2 content i post", user);
+    
+    user.addPost(post1);
+    user.addPost(post2);
+    
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))
       throw new UnsupportedOperationException("You have not changed the passwords");

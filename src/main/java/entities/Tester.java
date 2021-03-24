@@ -23,6 +23,8 @@ public class Tester {
         One one = new One(new ArrayList(), "Test1");
         Many many = new Many("Test1");
         
+        //Post postTest = new Post("hgierg", )
+        
         one.addMany(many);
 
         em.getTransaction().begin();

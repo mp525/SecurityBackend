@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,6 +27,16 @@ public class User implements Serializable {
   @NotNull
   @Column(name = "user_name", length = 25)
   private String userName;
+  
+  private String email;
+  private String firstName;
+  private String lastName;
+  
+  @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+  private List<Post> posts;
+  
+  
+  
   @Basic(optional = false)
   @NotNull
   @Size(min = 1, max = 255)
@@ -56,9 +68,30 @@ public class User implements Serializable {
 
   public User(String userName, String userPass) {
     this.userName = userName;
-
+    this.posts = new ArrayList();
     this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
   }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+  
+  public void addPost(Post post) {
+        this.posts.add(post);
+        if(post != null){
+            post.setUser(this);
+        }
+    }
+    
+        public void removePost(Post post) {
+        if(post != null){
+            this.posts.remove(post);
+        }
+    }
 
 
   public String getUserName() {
@@ -88,5 +121,31 @@ public class User implements Serializable {
   public void addRole(Role userRole) {
     roleList.add(userRole);
   }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+  
+  
 
 }
