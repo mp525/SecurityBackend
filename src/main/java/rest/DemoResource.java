@@ -1,7 +1,10 @@
 package rest;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dto.UserDTO;
 import entities.User;
+import facades.UserFacade;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
@@ -21,10 +24,11 @@ import utils.EMF_Creator;
  */
 @Path("info")
 public class DemoResource {
-    
+    private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     @Context
     private UriInfo context;
+    UserFacade uf=UserFacade.getUserFacade(EMF);
 
     @Context
     SecurityContext securityContext;
@@ -59,7 +63,13 @@ public class DemoResource {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to User: " + thisuser + "\"}";
     }
-
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("profile")
+    public String getFromUserProfile(String username) {
+        UserDTO ud = uf.getUserData(username);
+        return GSON.toJson(ud);
+    }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("admin")

@@ -6,6 +6,7 @@
 package dto;
 
 import entities.Post;
+import entities.User;
 import java.util.List;
 
 /**
@@ -27,7 +28,13 @@ public class UserDTO {
         this.lastName = lastName;
         this.posts = posts;
     }
-
+public UserDTO(User u) {
+        this.userName = u.getUserName();
+        this.email = u.getEmail();
+        this.firstName = u.getFirstName();
+        this.lastName = u.getLastName();
+        this.posts = u.getPosts();
+    }
     @Override
     public String toString() {
         return "UserDTO{" + "userName=" + userName + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", posts=" + posts + '}';

@@ -1,5 +1,6 @@
 package facades;
 
+import dto.UserDTO;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -41,6 +42,26 @@ public class UserFacade {
             em.close();
         }
         return user;
+    }
+    
+    public UserDTO getUserData(String username){
+        EntityManager em = emf.createEntityManager();
+
+        UserDTO f = null;
+        User user;
+         try {
+            user = em.find(User.class, username);
+            f=new UserDTO(user);
+            return f;
+         } finally {
+            em.close();
+        }
+        
+        
+    }
+    public static void main(String[] args) {
+        
+        System.out.println(instance.getUserData("user"));
     }
 
 }
