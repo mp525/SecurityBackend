@@ -19,26 +19,21 @@ public class UserDTO {
   private String email;
   private String firstName;
   private String lastName;
-  private List<Post> posts;
 
-    public UserDTO(String userName, String email, String firstName, String lastName, List<Post> posts) {
+    public UserDTO(String userName, String email, String firstName, String lastName) {
         this.userName = userName;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.posts = posts;
     }
 public UserDTO(User u) {
         this.userName = u.getUserName();
         this.email = u.getEmail();
         this.firstName = u.getFirstName();
         this.lastName = u.getLastName();
-        this.posts = u.getPosts();
+        
     }
-    @Override
-    public String toString() {
-        return "UserDTO{" + "userName=" + userName + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", posts=" + posts + '}';
-    }
+    
 
     public String getUserName() {
         return userName;
@@ -72,12 +67,6 @@ public UserDTO(User u) {
         this.lastName = lastName;
     }
 
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
+    
   
 }

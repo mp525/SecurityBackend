@@ -4,6 +4,7 @@ import dto.UserDTO;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import security.errorhandling.AuthenticationException;
 
 /**
@@ -48,20 +49,21 @@ public class UserFacade {
         EntityManager em = emf.createEntityManager();
 
         UserDTO f = null;
-        User user;
+        User user = null;
          try {
-            user = em.find(User.class, username);
+            user =  em.createQuery(
+        "SELECT u FROM User u WHERE u.userName = :userName",
+        User.class).setParameter("userName", username).getSingleResult();
+            
             f=new UserDTO(user);
             return f;
+            
          } finally {
             em.close();
         }
         
         
     }
-    public static void main(String[] args) {
-        
-        System.out.println(instance.getUserData("user"));
-    }
+    
 
 }
