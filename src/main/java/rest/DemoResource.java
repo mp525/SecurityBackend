@@ -42,6 +42,7 @@ public class DemoResource {
     }
 
     //Just to verify if the database is setup
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("all")
@@ -74,11 +75,12 @@ public class DemoResource {
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("all")
+    @Path("allPosts")
     public String getPosts() {
         PostsDTO p= uf.getUserPosts();
         return GSON.toJson(p);
     }
+   
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("admin")
