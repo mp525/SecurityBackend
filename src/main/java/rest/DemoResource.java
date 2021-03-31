@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.UserDTO;
+import dto.PostsDTO;
 import entities.User;
 import facades.UserFacade;
 import java.util.List;
@@ -70,6 +71,13 @@ public class DemoResource {
     public String getFromUserProfile(@PathParam("username")String username) {
         UserDTO ud = uf.getUserData(username);
         return GSON.toJson(ud);
+    }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("all")
+    public String getPosts() {
+        PostsDTO p= uf.getUserPosts();
+        return GSON.toJson(p);
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)

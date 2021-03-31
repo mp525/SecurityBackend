@@ -1,7 +1,11 @@
 package facades;
 
+import dto.PostsDTO;
 import dto.UserDTO;
+import entities.Post;
 import entities.User;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -61,9 +65,24 @@ public class UserFacade {
          } finally {
             em.close();
         }
+    }
+    public PostsDTO getUserPosts(){
+        EntityManager em = emf.createEntityManager();
+        PostsDTO p;
+        try{
+            TypedQuery<Post> query = 
+                       em.createQuery("Select p from Post p",Post.class);
+             p= new PostsDTO((ArrayList<Post>) query.getResultList());
+             return p;
+        }finally {
+            em.close();}
         
+
         
+                
     }
     
-
+    public static void main(String[] args) {
+        
+    }
 }
