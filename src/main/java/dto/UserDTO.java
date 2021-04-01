@@ -7,6 +7,7 @@ package dto;
 
 import entities.Post;
 import entities.User;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,21 @@ public UserDTO(User u) {
         this.lastName = u.getLastName();
         
     }
+
+    public static List<UserDTO>toDTO(List<User> u){
+        List<UserDTO> dtoList = new ArrayList();
+        for(User h: u){
+
+            dtoList.add(new UserDTO(h));
+        }
+        return dtoList;
+    }
+
+    public UserDTO() {
+        
+    }
+
+    
     
 
     public String getUserName() {

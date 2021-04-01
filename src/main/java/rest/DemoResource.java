@@ -6,6 +6,7 @@ import dto.UserDTO;
 import dto.PostsDTO;
 import entities.User;
 import facades.UserFacade;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
@@ -72,6 +73,14 @@ public class DemoResource {
     public String getFromUserProfile(@PathParam("username")String username) {
         UserDTO ud = uf.getUserData(username);
         return GSON.toJson(ud);
+    }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("Users")
+    public String getFromUserProfile() {
+        List<UserDTO>listDTO=uf.getUsersData();
+        
+        return GSON.toJson(listDTO);
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)

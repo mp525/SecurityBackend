@@ -2,6 +2,7 @@ package facades;
 
 import dto.PostsDTO;
 import dto.UserDTO;
+import static dto.UserDTO.toDTO;
 import entities.Post;
 import entities.User;
 import java.util.ArrayList;
@@ -62,6 +63,22 @@ public class UserFacade {
             f=new UserDTO(user);
             return f;
             
+         } finally {
+            em.close();
+        }
+    }
+    public List<UserDTO> getUsersData(){
+        EntityManager em = emf.createEntityManager();
+
+        UserDTO f = null;
+        User user = null;
+         try {
+           TypedQuery<User> query = 
+                em.createQuery("Select u from User u",User.class);
+                
+           
+                List<UserDTO>listDTO=toDTO(query.getResultList());
+            return listDTO;
          } finally {
             em.close();
         }
