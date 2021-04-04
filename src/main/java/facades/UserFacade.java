@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import security.errorhandling.AuthenticationException;
 
@@ -62,6 +63,22 @@ public class UserFacade {
             
             f=new UserDTO(user);
             return f;
+            
+         } finally {
+            em.close();
+        }
+    }
+    //not work yet
+    public void deleteUser(String userName){
+        EntityManager em = emf.createEntityManager();
+         try {
+           em.getTransaction().begin();
+           User u=em.find(User.class,userName);
+             em.remove(u.getPosts());
+             em.remove(u.getRoleList());
+
+             em.remove(u);
+            em.getTransaction().commit();
             
          } finally {
             em.close();
