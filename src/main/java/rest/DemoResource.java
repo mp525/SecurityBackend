@@ -2,9 +2,11 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.PostDTO;
 import dto.UserDTO;
 import dto.PostsDTO;
 import entities.User;
+import facades.PostFacade;
 import facades.UserFacade;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,6 +44,7 @@ public class DemoResource {
     @Context
     private UriInfo context;
     UserFacade uf=UserFacade.getUserFacade(EMF);
+        PostFacade uf2=PostFacade.getPostFacade(EMF);
 
     @Context
     SecurityContext securityContext;
@@ -95,6 +98,7 @@ public class DemoResource {
     //not work yet
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
     @Path("Delete/{userName}")
     public String deleteUser(@PathParam("userName")String userName) {
        uf.deleteUser(userName);
@@ -103,9 +107,9 @@ public class DemoResource {
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("allPosts")
-    public String getPosts() {
-        PostsDTO p= uf.getUserPosts();
+    @Path("allUserPosts/{userName}")
+    public String getPosts(@PathParam("userName")String userName) {
+        List<PostDTO> p= uf2.getAllFromUser(userName);
         return GSON.toJson(p);
     }
    
