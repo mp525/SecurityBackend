@@ -1,11 +1,13 @@
 package facades;
 
+import dto.PostDTO;
 import entities.Post;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -33,9 +35,20 @@ public class PostFacade {
         return instance;
     }
     
-    public ArrayList<Post> getAllFromUser(){
-        
-        return null;
+    public List<PostDTO> getAllFromUser(String username){
+          List<PostDTO> list = new ArrayList();
+        EntityManager em = emf.createEntityManager();
+
+        TypedQuery query = em.createQuery("SELECT p FROM Post p WHERE p.user.userName LIKE :user", Post.class);
+        query.setParameter("user", "%" + username + "%");
+        List<Post> posts = query.getResultList();
+
+        if (!(posts.isEmpty())) {
+            for (Post p1 : posts) {
+                list.add(new PostDTO(p1));
+            }
+        }
+        return list;
         
     }
     
