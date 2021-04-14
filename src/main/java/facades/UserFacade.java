@@ -1,5 +1,6 @@
 package facades;
 
+import dto.PostDTO;
 import dto.PostsDTO;
 import dto.UserDTO;
 import static dto.UserDTO.toDTO;
@@ -50,63 +51,61 @@ public class UserFacade {
         }
         return user;
     }
-    
-    public UserDTO getUserData(String username){
+
+    public UserDTO getUserData(String username) {
         EntityManager em = emf.createEntityManager();
 
         UserDTO f = null;
         User user = null;
-         try {
-            user =  em.createQuery(
-        "SELECT u FROM User u WHERE u.userName = :userName",
-        User.class).setParameter("userName", username).getSingleResult();
-            
-            f=new UserDTO(user);
+        try {
+            user = em.createQuery(
+                    "SELECT u FROM User u WHERE u.userName = :userName",
+                    User.class).setParameter("userName", username).getSingleResult();
+
+            f = new UserDTO(user);
             return f;
-            
-         } finally {
-            em.close();
-        }
-    }
-    //not work yet
-    public void deleteUser(String userName){
-        EntityManager em = emf.createEntityManager();
-         try {
-           em.getTransaction().begin();
-           User u=em.find(User.class,userName);
-             em.remove(u.getPosts());
-             em.remove(u.getRoleList());
 
-             em.remove(u);
-            em.getTransaction().commit();
-            
-         } finally {
+        } finally {
             em.close();
         }
     }
-    public List<UserDTO> getUsersData(){
+
+    //not work yet
+    public void deleteUser(String userName) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            User u = em.find(User.class, userName);
+            em.remove(u.getPosts());
+            em.remove(u.getRoleList());
+
+            em.remove(u);
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<UserDTO> getUsersData() {
         EntityManager em = emf.createEntityManager();
 
         UserDTO f = null;
         User user = null;
-         try {
-           TypedQuery<User> query = 
-                em.createQuery("Select u from User u",User.class);
-                
-           
-                List<UserDTO>listDTO=toDTO(query.getResultList());
+        try {
+            TypedQuery<User> query
+                    = em.createQuery("Select u from User u", User.class);
+
+            List<UserDTO> listDTO = toDTO(query.getResultList());
             return listDTO;
-         } finally {
+        } finally {
             em.close();
         }
     }
+
     
 
-        
-                
-    
-    
     public static void main(String[] args) {
-        
+
     }
 }

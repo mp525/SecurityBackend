@@ -38,13 +38,14 @@ import utils.EMF_Creator;
  * @author lam@cphbusiness.dk
  */
 @Path("info")
-public class DemoResource {
+public class UserResource {
+
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     @Context
     private UriInfo context;
-    UserFacade uf=UserFacade.getUserFacade(EMF);
-        PostFacade uf2=PostFacade.getPostFacade(EMF);
+    UserFacade userFacade = UserFacade.getUserFacade(EMF);
+    PostFacade postFacade = PostFacade.getPostFacade(EMF);
 
     @Context
     SecurityContext securityContext;
@@ -56,7 +57,6 @@ public class DemoResource {
     }
 
     //Just to verify if the database is setup
-    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("all")
@@ -64,7 +64,7 @@ public class DemoResource {
 
         EntityManager em = EMF.createEntityManager();
         try {
-            TypedQuery<User> query = em.createQuery ("select u from User u",entities.User.class);
+            TypedQuery<User> query = em.createQuery("select u from User u", entities.User.class);
             List<User> users = query.getResultList();
             return "[" + users.size() + "]";
         } finally {
@@ -80,39 +80,43 @@ public class DemoResource {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to User: " + thisuser + "\"}";
     }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("profile/{username}")
-    public String getFromUserProfile(@PathParam("username")String username) {
-        UserDTO ud = uf.getUserData(username);
+    public String getFromUserProfile(@PathParam("username") String username) {
+        UserDTO ud = userFacade.getUserData(username);
         return GSON.toJson(ud);
     }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("Users")
     public String getFromUserProfile() {
-        List<UserDTO>listDTO=uf.getUsersData();
-        
+        List<UserDTO> listDTO = userFacade.getUsersData();
+
         return GSON.toJson(listDTO);
     }
+
     //not work yet
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
     @Path("Delete/{userName}")
-    public String deleteUser(@PathParam("userName")String userName) {
-       uf.deleteUser(userName);
-        
+    public String deleteUser(@PathParam("userName") String userName) {
+        userFacade.deleteUser(userName);
+
         return GSON.toJson("Success");
     }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("allUserPosts/{userName}")
-    public String getPosts(@PathParam("userName")String userName) {
-        List<PostDTO> p= uf2.getAllFromUser(userName);
+    public String getPosts(@PathParam("userName") String userName) {
+        List<PostDTO> p = postFacade.getAllFromUser(userName);
         return GSON.toJson(p);
     }
-   
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("admin")
@@ -121,8 +125,14 @@ public class DemoResource {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
     }
-    
 
-
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("allPosts")
+    @RolesAllowed("user")
+    public String getAllPosts() {
+        PostsDTO posts = postFacade.getAllPosts();
+        return GSON.toJson(posts);
+    }
 
 }
