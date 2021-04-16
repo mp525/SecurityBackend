@@ -1,6 +1,7 @@
 package facades;
 
 import dto.PostDTO;
+import dto.PostsDTO;
 import entities.Post;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,23 @@ public class PostFacade {
         
         
     }
+    
+    public PostsDTO getAllPosts() {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            TypedQuery<Post> query = em.createQuery("Select p from Post p", Post.class);
+            List<Post> posts = query.getResultList();
+            PostsDTO postsDTO = new PostsDTO(posts);
+            return postsDTO;
+        } finally {
+            em.close();
+        }
+
+    }
+    
+    
+
     
 
 }

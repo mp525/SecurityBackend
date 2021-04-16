@@ -7,6 +7,7 @@ package dto;
 
 import entities.Post;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,6 +22,13 @@ public class PostsDTO {
             list.add(new PostDTO(post));
         });
         
+    }
+    
+    public PostsDTO(List<Post> posts) {
+        this.list = new ArrayList();
+        for (Post post : posts) {
+            this.list.add(new PostDTO(post));
+        }
     }
     public ArrayList<PostDTO> getList() {
         return list;
