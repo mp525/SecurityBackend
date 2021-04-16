@@ -83,6 +83,7 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("profile/{username}")
+    @RolesAllowed("user")
     public String getFromUserProfile(@PathParam("username")String username) {
         UserDTO ud = uf.getUserData(username);
         return GSON.toJson(ud);
@@ -104,6 +105,14 @@ public class DemoResource {
     public String deleteUser(@PathParam("userName")String userName) {
        uf.deleteUser(userName);
         
+        return GSON.toJson("Success");
+    }
+    
+     @DELETE
+    @Path("deletePost/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String deletePost(@PathParam("id") String id) {
+        uf.deleteUser(id);
         return GSON.toJson("Success");
     }
     @GET
