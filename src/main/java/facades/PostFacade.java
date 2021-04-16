@@ -35,11 +35,13 @@ public class PostFacade {
         return instance;
     }
     
-    public List<PostDTO> getAllFromUser(String username){
+   
+    
+    public List<PostDTO> getAllButWithDateFirst(String username){
           List<PostDTO> list = new ArrayList();
         EntityManager em = emf.createEntityManager();
 
-        TypedQuery query = em.createQuery("SELECT p FROM Post p WHERE p.user.userName LIKE :user", Post.class);
+        TypedQuery query = em.createQuery("SELECT p FROM Post p WHERE p.user.userName LIKE :user ORDER BY p.posted DESC", Post.class);
         query.setParameter("user", "%" + username + "%");
         List<Post> posts = query.getResultList();
 

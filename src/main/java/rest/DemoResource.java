@@ -90,6 +90,7 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("Users")
+    @RolesAllowed("user")
     public String getFromUserProfile() {
         List<UserDTO>listDTO=uf.getUsersData();
         
@@ -108,10 +109,12 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("allUserPosts/{userName}")
+    @RolesAllowed("user")
     public String getPosts(@PathParam("userName")String userName) {
-        List<PostDTO> p= uf2.getAllFromUser(userName);
+        List<PostDTO> p= uf2.getAllButWithDateFirst(userName);
         return GSON.toJson(p);
     }
+    
    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
