@@ -12,6 +12,7 @@ import entities.Post;
  * @author matti
  */
 public class PostDTO {
+    private int id;
     private String content;
     private String posted;
     private UserDTO user;
@@ -23,7 +24,7 @@ public class PostDTO {
         this.user = user;
     }
     public PostDTO(Post p) {
-        
+        this.id=p.getId();
         this.content = p.getContent();
         this.posted = p.getPosted().toString();
         this.user = new UserDTO(p.getUser());
@@ -51,6 +52,14 @@ public class PostDTO {
 
     public void setUser(UserDTO user) {
         this.user = user;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
     

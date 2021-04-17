@@ -3,6 +3,7 @@ package facades;
 import dto.PostDTO;
 import dto.PostsDTO;
 import entities.Post;
+import entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -60,9 +61,21 @@ public class PostFacade {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        Query query = em.createQuery("Delete from Post p where p.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        Post p= em.find(Post.class, id);
+//        User u =p.getUser();
+        em.remove(p);
+        
+        em.getTransaction().commit();
+        return "Deleted the post";
+    }
+    public String edit(PostDTO p1){
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Post p= em.find(Post.class, p1.getId());
+        p.setContent(p1.getContent());
+        em.persist(p);
+        
         em.getTransaction().commit();
         return "Deleted the post";
     }

@@ -27,6 +27,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -93,13 +94,22 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("Users")
-    @RolesAllowed("user")
+    @RolesAllowed("admin")
     public String getFromUserProfile() {
         List<UserDTO> listDTO = userFacade.getUsersData();
 
         return GSON.toJson(listDTO);
     }
-
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("allUserPosts/{userName}")
+    @RolesAllowed("user")
+    public String getPosts(@PathParam("userName")String userName) {
+        List<PostDTO> p= postFacade.getAllButWithDateFirst(userName);
+        return GSON.toJson(p);
+    }
+    
+    //admin from down here ----------------------------------------------
     //not work yet
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -111,21 +121,27 @@ public class UserResource {
         return GSON.toJson("Success");
     }
     
-     @DELETE
+    @DELETE
     @Path("deletePost/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public String deletePost(@PathParam("id") String id) {
-        userFacade.deleteUser(id);
-        return GSON.toJson("Success");
+    @RolesAllowed("admin")
+    public String deletePost(@PathParam("id") int id) {
+        String result=postFacade.delete(id);
+        return GSON.toJson(result);
     }
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("allUserPosts/{userName}")
-    @RolesAllowed("user")
-    public String getPosts(@PathParam("userName")String userName) {
-        List<PostDTO> p= postFacade.getAllButWithDateFirst(userName);
-        return GSON.toJson(p);
+    
+    @PUT
+    @Path("editPost")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed("admin")
+    public String editPost(String post) {
+        PostDTO p = GSON.fromJson(post, PostDTO.class);
+        String result=postFacade.edit(p);
+        return GSON.toJson(result);
     }
+    
+    
     
 
     @GET
@@ -140,7 +156,7 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("allPosts")
-    @RolesAllowed("user")
+    @RolesAllowed("user_admin")
     public String getAllPosts() {
         PostsDTO posts = postFacade.getAllPosts();
         return GSON.toJson(posts);
