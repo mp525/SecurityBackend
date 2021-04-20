@@ -5,6 +5,7 @@
  */
 package entities;
 
+import dto.PostDTO;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -46,6 +47,13 @@ public class Post implements Serializable {
         this.content = content;
         this.posted = new Date();
         this.user = user;
+    }
+
+    public Post(PostDTO p1) {
+        
+        this.content = p1.getContent();
+        this.posted = new Date();
+        this.user = new User(p1.getUser());
     }
 
     public User getUser() {

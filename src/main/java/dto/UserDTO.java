@@ -20,12 +20,19 @@ public class UserDTO {
   private String email;
   private String firstName;
   private String lastName;
-
+  private String userPass;
     public UserDTO(String userName, String email, String firstName, String lastName) {
         this.userName = userName;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+    public UserDTO(String userName, String email, String firstName, String lastName,String userPass) {
+        this.userName = userName;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userPass=userPass;
     }
 public UserDTO(User u) {
         this.userName = u.getUserName();
@@ -81,6 +88,14 @@ public UserDTO(User u) {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getUserPass() {
+        return userPass;
+    }
+
+    public void setUserPass(String userPass) {
+        this.userPass = userPass;
     }
 
     

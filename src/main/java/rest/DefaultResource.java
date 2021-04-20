@@ -15,11 +15,7 @@ import javax.ws.rs.core.MediaType;
 import facades.FetchFacade;
 import java.util.List;
  
-/**
- * REST Web Service
- *
- * @author lam
- */
+
 @Path("default")
 public class DefaultResource {
     private final FetchFacade facade = new FetchFacade();

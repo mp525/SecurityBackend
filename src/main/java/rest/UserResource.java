@@ -121,6 +121,8 @@ public class UserResource {
         return GSON.toJson("Success");
     }
     
+     //admin er en boss derfor skal han kunne gøre det her
+    //hvis ikke admin så "no can do mate"
     @DELETE
     @Path("deletePost/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -130,6 +132,8 @@ public class UserResource {
         return GSON.toJson(result);
     }
     
+    //admin er en boss derfor skal han kunne gøre det her
+    //hvis ikke admin så "no can do mate"
     @PUT
     @Path("editPost")
     @Produces({MediaType.APPLICATION_JSON})
@@ -140,7 +144,22 @@ public class UserResource {
         String result=postFacade.edit(p);
         return GSON.toJson(result);
     }
-    
+    //Gør så alle ikke bare kan poste som alle
+    //find bruger ved hjælp af hvad man er logget ind som
+    @POST
+    @Path("addPost")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String addPost(String post) {
+        PostDTO p = GSON.fromJson(post, PostDTO.class);
+        //ide indtil videre
+        String name =securityContext.getUserPrincipal().getName();
+        p.getUser().setUserName(name);
+        //Virker det mon sikkerhedsmæssigt
+        PostDTO result=postFacade.addPost(p);
+        return GSON.toJson(result);
+        
+    }
     
     
 

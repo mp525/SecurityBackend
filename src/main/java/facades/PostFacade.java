@@ -79,6 +79,18 @@ public class PostFacade {
         em.getTransaction().commit();
         return "Deleted the post";
     }
+    public PostDTO addPost(PostDTO p1){
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Post p = new Post(p1);
+        
+        em.persist(p);
+        
+        em.getTransaction().commit();
+        return p1;
+    }
+    
     public static void main(String[] args) {
 
         
