@@ -152,6 +152,7 @@ public class UserResource {
     @Path("addPost")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed("user")
     public String addPost(String post) {
         PostDTO p = GSON.fromJson(post, PostDTO.class);
         //ide indtil videre
