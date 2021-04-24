@@ -15,11 +15,13 @@ import java.util.List;
  * @author matti
  */
 public class UserDTO {
+
     private String userName;
-  
-  private String email;
-  private String firstName;
-  private String lastName;
+
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String password;
 
     public UserDTO(String userName, String email, String firstName, String lastName) {
         this.userName = userName;
@@ -27,17 +29,26 @@ public class UserDTO {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-public UserDTO(User u) {
+
+    public UserDTO(User u) {
         this.userName = u.getUserName();
         this.email = u.getEmail();
         this.firstName = u.getFirstName();
         this.lastName = u.getLastName();
-        
+
     }
 
-    public static List<UserDTO>toDTO(List<User> u){
+    public UserDTO(String userName, String email, String firstName, String lastName, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
+
+    public static List<UserDTO> toDTO(List<User> u) {
         List<UserDTO> dtoList = new ArrayList();
-        for(User h: u){
+        for (User h : u) {
 
             dtoList.add(new UserDTO(h));
         }
@@ -45,11 +56,16 @@ public UserDTO(User u) {
     }
 
     public UserDTO() {
-        
+
     }
 
-    
-    
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getUserName() {
         return userName;
@@ -83,6 +99,4 @@ public UserDTO(User u) {
         this.lastName = lastName;
     }
 
-    
-  
 }

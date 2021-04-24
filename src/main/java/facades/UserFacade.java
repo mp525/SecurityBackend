@@ -5,6 +5,7 @@ import dto.PostsDTO;
 import dto.UserDTO;
 import static dto.UserDTO.toDTO;
 import entities.Post;
+import entities.Role;
 import entities.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,22 @@ public class UserFacade {
         } finally {
             em.close();
         }
+    }
+    
+    public User registerUser(String username, String password) {
+        EntityManager em = emf.createEntityManager();
+        User user;
+        Role userRole = new Role("user");
+        try {
+            em.getTransaction().begin();
+            user = new User(username, password);
+            user.addRole(userRole);
+            em.persist(user);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return user;
     }
 
     

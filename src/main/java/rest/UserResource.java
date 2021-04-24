@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nimbusds.jose.JOSEException;
 import dto.PostDTO;
 import dto.UserDTO;
 import dto.PostsDTO;
@@ -32,6 +33,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
 
 /**
@@ -133,6 +135,55 @@ public class UserResource {
     public String getAllPosts() {
         PostsDTO posts = postFacade.getAllPosts();
         return GSON.toJson(posts);
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String registerUser(String givenUser) throws AuthenticationException, JOSEException {
+        UserDTO dto = GSON.fromJson(givenUser, UserDTO.class);
+        String username = dto.getUserName();
+        String password = dto.getPassword();
+        EntityManager em = EMF.createEntityManager();
+        List<User> users;
+        List<String> usernames = new ArrayList();
+        String json;
+        try {
+            TypedQuery<User> query = em.createQuery("select u from User u", User.class);
+            users = query.getResultList();
+            for (User user : users) {
+                usernames.add(user.getUserName());
+            }
+        } finally {
+            em.close();
+        }
+
+        if (username.isEmpty() || password.isEmpty()) {
+            json = GSON.toJson("{\"msg\": \"Both boxes must be filled, try again.\"}");
+            return "{\"msg\": \"Both boxes must be filled, try again.\"}";
+        } else if (usernames.contains(username)) {
+            //json = GSON.toJson("{\"msg\": \"Username " + username + " already in use. Try again.\"}");
+            return "{\"msg\": \"Username " + username + " already in use. Try again.\"}";
+        } else {
+            User user = userFacade.registerUser(username, password);
+            json = GSON.toJson("{\"msg\": \"User " + username + " registered\"}");
+            return json;
+//            try {
+//                return quickLogin(username, password);
+//
+//            } catch (JOSEException | AuthenticationException ex) {
+//                if (ex instanceof AuthenticationException) {
+//                    throw (AuthenticationException) ex;
+//                }
+//            }
+
+//            if (user != null) {
+//                return "{\"msg\": \"User " + username + " registered\"}";
+//            }
+        }
+        //json = GSON.toJson("{\"msg\": \"Action could not be executed. Something went wrong.\"}");
+        //return "{\"msg\": \"Action could not be executed. Something went wrong.\"}";
+        //throw new AuthenticationException("Invalid username or password! Please try again");
     }
 
 }
