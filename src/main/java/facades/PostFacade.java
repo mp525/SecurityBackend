@@ -3,11 +3,13 @@ package facades;
 import dto.PostDTO;
 import dto.PostsDTO;
 import entities.Post;
+import entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -36,11 +38,13 @@ public class PostFacade {
         return instance;
     }
     
-    public List<PostDTO> getAllFromUser(String username){
+   
+    
+    public List<PostDTO> getAllButWithDateFirst(String username){
           List<PostDTO> list = new ArrayList();
         EntityManager em = emf.createEntityManager();
 
-        TypedQuery query = em.createQuery("SELECT p FROM Post p WHERE p.user.userName LIKE :user", Post.class);
+        TypedQuery query = em.createQuery("SELECT p FROM Post p WHERE p.user.userName LIKE :user ORDER BY p.posted DESC", Post.class);
         query.setParameter("user", "%" + username + "%");
         List<Post> posts = query.getResultList();
 
@@ -53,6 +57,45 @@ public class PostFacade {
         
     }
     
+    public String delete(int id){
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Post p= em.find(Post.class, id);
+//        User u =p.getUser();
+        em.remove(p);
+        
+        em.getTransaction().commit();
+        return "Deleted the post";
+    }
+    public String edit(PostDTO p1){
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Post p= em.find(Post.class, p1.getId());
+        p.setContent(p1.getContent());
+        em.persist(p);
+        
+        em.getTransaction().commit();
+        return "Deleted the post";
+    }
+    public PostDTO addPost(PostDTO p1){
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Post p = new Post(p1);
+        
+        em.persist(p);
+        
+        em.getTransaction().commit();
+        return p1;
+    }
+    
+    public static void main(String[] args) {
+
+        
+        
+    }
     
     public PostsDTO getAllPosts() {
         EntityManager em = emf.createEntityManager();
@@ -69,6 +112,7 @@ public class PostFacade {
     }
     
     
+
     
 
 }

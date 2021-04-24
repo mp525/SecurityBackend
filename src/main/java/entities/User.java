@@ -1,5 +1,6 @@
 package entities;
 
+import dto.UserDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,12 @@ public class User implements Serializable {
     @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
   @ManyToMany
   private List<Role> roleList = new ArrayList<>();
+
+    User(UserDTO user) {
+    this.userName = user.getUserName();
+    this.posts = new ArrayList();
+    this.userPass = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+    }
 
     
 
