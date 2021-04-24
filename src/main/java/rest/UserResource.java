@@ -177,8 +177,17 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("allPosts")
-    @RolesAllowed("user_admin")
+    @RolesAllowed("user")
     public String getAllPosts() {
+        PostsDTO posts = postFacade.getAllPosts();
+        return GSON.toJson(posts);
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("allPostsAdmin")
+    @RolesAllowed("admin")
+    public String getAllPostsAdmin() {
         PostsDTO posts = postFacade.getAllPosts();
         return GSON.toJson(posts);
     }
