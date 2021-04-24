@@ -86,10 +86,12 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("profile/{username}")
+    @Path("profile")
     @RolesAllowed("user")
-    public String getFromUserProfile(@PathParam("username")String username) {
-        UserDTO ud = userFacade.getUserData(username);
+    public String getFromUserProfile() {
+         String name =securityContext.getUserPrincipal().getName();
+         UserDTO ud = userFacade.getUserData(name);
+
         return GSON.toJson(ud);
     }
 
@@ -97,7 +99,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("Users")
     @RolesAllowed("admin")
-    public String getFromUserProfile() {
+    public String getAllFromUserProfile() {
         List<UserDTO> listDTO = userFacade.getUsersData();
 
         return GSON.toJson(listDTO);
