@@ -113,16 +113,44 @@ public class UserResource {
         return GSON.toJson(p);
     }
     
+     //kun sin egen
+    
+    @DELETE
+    @Path("deletePostUser/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @RolesAllowed("user")
+    public String deletePost(@PathParam("id") int id) {
+        String name = securityContext.getUserPrincipal().getName();
+        String result=postFacade.saveDelete(id, name);
+        
+        return GSON.toJson(result);
+    }
+    
+        //kun sin egen
+    @PUT
+    @Path("editPostUser")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed("user")
+    public String editPostUser(String post) {
+        PostDTO p = GSON.fromJson(post, PostDTO.class);
+        if(p.getUser().getUserName().equals(securityContext.getUserPrincipal().getName())){
+            String result=postFacade.edit(p);
+        return GSON.toJson(result);
+        }else{
+            return "not allowed mate";    
+        }
+        
+    }
+    
     //admin from down here ----------------------------------------------
     //not work yet
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("admin")
-    @Path("Delete/{userName}")
-    public String deleteUser(@PathParam("userName") String userName) {
-        userFacade.deleteUser(userName);
-
-        return GSON.toJson("Success");
+    @Path("user/deleteUser/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String deleteUser(@PathParam("id") String id) {
+        String result=userFacade.deleteUser(id);
+        return GSON.toJson(result);
     }
     
      //admin er en boss derfor skal han kunne gøre det her
@@ -131,7 +159,7 @@ public class UserResource {
     @Path("deletePost/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     @RolesAllowed("admin")
-    public String deletePost(@PathParam("id") int id) {
+    public String deletePostUser(@PathParam("id") int id) {
         String result=postFacade.delete(id);
         return GSON.toJson(result);
     }

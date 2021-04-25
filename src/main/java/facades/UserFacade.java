@@ -72,20 +72,22 @@ public class UserFacade {
     }
 
     //not work yet
-    public void deleteUser(String userName) {
+    public String deleteUser(String userName) {
         EntityManager em = emf.createEntityManager();
         try {
-            em.getTransaction().begin();
-            User u = em.find(User.class, userName);
-            em.remove(u.getPosts());
-            em.remove(u.getRoleList());
-
-            em.remove(u);
-            em.getTransaction().commit();
-
+                em.getTransaction().begin();
+                User u = null;  
+            if(u==null){
+                System.out.println("No User named that");
+                return "It did not work";
+            }else{
+                em.remove(u);
+                em.getTransaction().commit();
+                return "worked";
+            }
         } finally {
             em.close();
-        }
+        }   
     }
 
     public List<UserDTO> getUsersData() {
