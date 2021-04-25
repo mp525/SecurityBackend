@@ -7,6 +7,7 @@ import dto.PostDTO;
 import dto.UserDTO;
 import dto.PostsDTO;
 import entities.User;
+import facades.FetchFacade;
 import facades.PostFacade;
 import facades.UserFacade;
 import java.io.File;
@@ -34,6 +35,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
 
@@ -49,9 +52,35 @@ public class UserResource {
     private UriInfo context;
     UserFacade userFacade = UserFacade.getUserFacade(EMF);
     PostFacade postFacade = PostFacade.getPostFacade(EMF);
-
+    FetchFacade f = new FetchFacade();
     @Context
     SecurityContext securityContext;
+
+    //picture upload
+    @POST
+    @Path("/fileupload")  //Your Path or URL to call this service
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadFile(
+            @DefaultValue("true") @FormDataParam("enabled") boolean enabled,
+            @FormDataParam("file") InputStream uploadedInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail) {
+        //Your local disk path where you want to store the file
+        String uploadedFileLocation = "D://uploadedFiles/" + fileDetail.getFileName();
+        System.out.println(uploadedFileLocation);
+        // save it
+        File objFile = new File(uploadedFileLocation);
+        if (objFile.exists()) {
+            objFile.delete();
+
+        }
+
+        f.saveToFile(uploadedInputStream, uploadedFileLocation);
+
+        String output = "File uploaded via Jersey based RESTFul Webservice to: " + uploadedFileLocation;
+
+        return Response.status(200).entity(output).build();
+
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -89,8 +118,8 @@ public class UserResource {
     @Path("profile")
     @RolesAllowed("user")
     public String getFromUserProfile() {
-         String name =securityContext.getUserPrincipal().getName();
-         UserDTO ud = userFacade.getUserData(name);
+        String name = securityContext.getUserPrincipal().getName();
+        UserDTO ud = userFacade.getUserData(name);
 
         return GSON.toJson(ud);
     }
@@ -104,15 +133,16 @@ public class UserResource {
 
         return GSON.toJson(listDTO);
     }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("allUserPosts/{userName}")
     @RolesAllowed("user")
-    public String getPosts(@PathParam("userName")String userName) {
-        List<PostDTO> p= postFacade.getAllButWithDateFirst(userName);
+    public String getPosts(@PathParam("userName") String userName) {
+        List<PostDTO> p = postFacade.getAllButWithDateFirst(userName);
         return GSON.toJson(p);
     }
-    
+
     //admin from down here ----------------------------------------------
     //not work yet
     @DELETE
@@ -124,18 +154,18 @@ public class UserResource {
 
         return GSON.toJson("Success");
     }
-    
-     //admin er en boss derfor skal han kunne gøre det her
+
+    //admin er en boss derfor skal han kunne gøre det her
     //hvis ikke admin så "no can do mate"
     @DELETE
     @Path("deletePost/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     @RolesAllowed("admin")
     public String deletePost(@PathParam("id") int id) {
-        String result=postFacade.delete(id);
+        String result = postFacade.delete(id);
         return GSON.toJson(result);
     }
-    
+
     //admin er en boss derfor skal han kunne gøre det her
     //hvis ikke admin så "no can do mate"
     @PUT
@@ -145,9 +175,10 @@ public class UserResource {
     @RolesAllowed("admin")
     public String editPost(String post) {
         PostDTO p = GSON.fromJson(post, PostDTO.class);
-        String result=postFacade.edit(p);
+        String result = postFacade.edit(p);
         return GSON.toJson(result);
     }
+
     //Gør så alle ikke bare kan poste som alle
     //find bruger ved hjælp af hvad man er logget ind som
     @POST
@@ -158,15 +189,13 @@ public class UserResource {
     public String addPost(String post) {
         PostDTO p = GSON.fromJson(post, PostDTO.class);
         //ide indtil videre
-        String name =securityContext.getUserPrincipal().getName();
+        String name = securityContext.getUserPrincipal().getName();
         p.getUser().setUserName(name);
         //Virker det mon sikkerhedsmæssigt
-        PostDTO result=postFacade.addPost(p);
+        PostDTO result = postFacade.addPost(p);
         return GSON.toJson(result);
-        
+
     }
-    
-    
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -185,7 +214,7 @@ public class UserResource {
         PostsDTO posts = postFacade.getAllPosts();
         return GSON.toJson(posts);
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("allPostsAdmin")
@@ -194,7 +223,7 @@ public class UserResource {
         PostsDTO posts = postFacade.getAllPosts();
         return GSON.toJson(posts);
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
