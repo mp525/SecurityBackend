@@ -134,13 +134,9 @@ public class UserResource {
     @RolesAllowed("user")
     public String editPostUser(String post) {
         PostDTO p = GSON.fromJson(post, PostDTO.class);
-        if(p.getUser().getUserName().equals(securityContext.getUserPrincipal().getName())){
-            String result=postFacade.edit(p);
+        String name=securityContext.getUserPrincipal().getName();
+        String result=postFacade.editForUser(p,name);
         return GSON.toJson(result);
-        }else{
-            return "not allowed mate";    
-        }
-        
     }
     
     //admin from down here ----------------------------------------------

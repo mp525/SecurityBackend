@@ -74,7 +74,7 @@ public class PostFacade {
         em.getTransaction().begin();
         Post p= em.find(Post.class, id);
 //        User u =p.getUser();
-        if(p.getUser().getUserName()==username){
+        if(p.getUser().getUserName().equals(username)){
         em.remove(p);    
         em.getTransaction().commit();
         return "Deleted the post";
@@ -97,7 +97,21 @@ public class PostFacade {
         em.persist(p);
         
         em.getTransaction().commit();
-        return "Deleted the post";
+        return "Edited the post";
+    }
+    public String editForUser(PostDTO p1,String username){
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Post p= em.find(Post.class, p1.getId()); 
+        if(p.getUser().getUserName().equals(username)){
+         p.setContent(p1.getContent());
+        em.persist(p);
+        em.getTransaction().commit();
+        return "Edited the post";
+        
+        }else{
+        return "You cant delete other peoples post you nophead";    
+        }
     }
     public PostDTO addPost(PostDTO p1){
         EntityManager em = emf.createEntityManager();
