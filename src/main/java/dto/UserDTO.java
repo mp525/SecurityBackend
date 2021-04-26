@@ -9,6 +9,7 @@ import entities.Post;
 import entities.User;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -115,5 +116,46 @@ public class UserDTO {
 //    public void setUserPass(String userPass) {
 //        this.userPass = userPass;
 //    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.userName);
+        hash = 23 * hash + Objects.hashCode(this.email);
+        hash = 23 * hash + Objects.hashCode(this.firstName);
+        hash = 23 * hash + Objects.hashCode(this.lastName);
+        hash = 23 * hash + Objects.hashCode(this.password);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UserDTO other = (UserDTO) obj;
+        if (!Objects.equals(this.userName, other.userName)) {
+            return false;
+        }
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstName, other.firstName)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastName, other.lastName)) {
+            return false;
+        }
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
+        return true;
+    }
 
 }
