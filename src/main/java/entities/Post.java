@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -23,6 +24,8 @@ import javax.validation.constraints.Size;
  * @author Mathias
  */
 @Entity
+@NamedQuery(name = "Post.deleteAllRows", query = "DELETE from Post")
+
 public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
