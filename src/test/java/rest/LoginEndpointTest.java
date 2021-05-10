@@ -230,8 +230,50 @@ public class LoginEndpointTest {
                 .body("message", equalTo("Not authenticated - do login"));
     }
 
-    
- 
+    @Test
+    public void adminNotAuthenticatedEdit() {
+        logOut();
+        given()
+                .contentType("application/json")
+                .when()
+                .put("/info/editPost").then()
+                .statusCode(403)
+                .body("code", equalTo(403))
+                .body("message", equalTo("Not authenticated - do login"));
+    }
+ @Test
+    public void userNotAuthenticatedEdit() {
+        logOut();
+        given()
+                .contentType("application/json")
+                .when()
+                .put("/info/editPostUser").then()
+                .statusCode(403)
+                .body("code", equalTo(403))
+                .body("message", equalTo("Not authenticated - do login"));
+    }
+    @Test
+    public void adminAuthenticatedEditButHasNoBody() {
+        login("admin", "test");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .when()
+                .put("/info/editPost").then()
+                .statusCode(500)
+                .body("code", equalTo(500));
+    }
+ @Test
+    public void userAuthenticatedEditButHasNoBody() {
+        login("user", "test");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .when()
+                .put("/info/editPostUser").then()
+                .statusCode(500)
+                .body("code", equalTo(500));
+    }
 
 
 }

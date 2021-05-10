@@ -19,7 +19,7 @@ public class SharedSecret {
         */
         //REMOVE BEFORE PRODUCTION
         if(true){
-            return "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA".getBytes();
+            return "YaKo12212211KOgjijgKOKO9132639712696".getBytes();
         }
         if (secret == null) {  //Or better read as an environment variable set on production server
             secret = new byte[32];
