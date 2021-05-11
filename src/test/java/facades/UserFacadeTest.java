@@ -106,6 +106,7 @@ public class UserFacadeTest {
      * Test of registerUser method, of class UserFacade.
      */
     //@Test
+    /* TODO FIX THIS TEST
     public void testRegisterUser() {
         System.out.println("registerUser");
         String username = "";
@@ -116,6 +117,8 @@ public class UserFacadeTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
+
+     */
 
     
 }
