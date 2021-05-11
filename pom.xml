@@ -59,6 +59,13 @@
             <version>3.0.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
 
         <dependency>
             <groupId>javax</groupId>

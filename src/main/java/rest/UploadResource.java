@@ -1,5 +1,6 @@
 package rest;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.*;
@@ -23,8 +24,8 @@ public class UploadResource {
 
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String uploadFile(
-            @FormDataParam("file") InputStream uploadedInputStream
-            //@FormDataParam("file") FormDataContentDisposition fileDetail
+            @FormDataParam("file") InputStream uploadedInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail
     ) {
         return "Returned";
     }
