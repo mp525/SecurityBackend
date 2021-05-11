@@ -106,13 +106,13 @@ public class UserFacade {
         }
     }
     
-    public User registerUser(String username, String password) {
+    public User registerUser(String username, String password,String email,String firstName,String lastName) {
         EntityManager em = emf.createEntityManager();
         User user;
         Role userRole = new Role("user");
         try {
             em.getTransaction().begin();
-            user = new User(username, password);
+            user = new User(username, password,email,firstName,lastName);
             user.addRole(userRole);
             em.persist(user);
             em.getTransaction().commit();

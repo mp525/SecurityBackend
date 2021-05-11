@@ -226,6 +226,9 @@ public class UserResource {
         UserDTO dto = GSON.fromJson(givenUser, UserDTO.class);
         String username = dto.getUserName();
         String password = dto.getPassword();
+        String firstName=dto.getFirstName();
+        String lastName=dto.getLastName();
+        String email=dto.getEmail();
         EntityManager em = EMF.createEntityManager();
         List<User> users;
         List<String> usernames = new ArrayList();
@@ -247,7 +250,7 @@ public class UserResource {
             //json = GSON.toJson("{\"msg\": \"Username " + username + " already in use. Try again.\"}");
             return "{\"msg\": \"Username " + username + " already in use. Try again.\"}";
         } else {
-            User user = userFacade.registerUser(username, password);
+            User user = userFacade.registerUser(username, password,email,firstName,lastName);
             json = GSON.toJson("{\"msg\": \"User " + username + " registered\"}");
             return json;
 //            try {
