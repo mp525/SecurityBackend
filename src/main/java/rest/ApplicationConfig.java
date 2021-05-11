@@ -10,12 +10,13 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.ApplicationPath;
 
 import org.glassfish.jersey.media.multipart.MultiPartMediaTypes;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-
+import org.glassfish.jersey.server.ResourceConfig;
 
 @ApplicationPath("api")
-public class ApplicationConfig extends ResourceConfig  {
+public class ApplicationConfig extends ResourceConfig {
+
+
     public ApplicationConfig() {
         packages("rest").register(cors.CorsFilter.class);
         packages("rest").register(errorhandling.GenericExceptionMapper.class);
@@ -33,10 +34,7 @@ public class ApplicationConfig extends ResourceConfig  {
         packages("rest").register(security.errorhandling.NotAuthorizedExceptionMapper.class);
     }
 
-}
-
-
-    /*
+/*
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
@@ -65,6 +63,5 @@ public class ApplicationConfig extends ResourceConfig  {
         resources.add(security.errorhandling.NotAuthorizedExceptionMapper.class);
     }
 
-
-}*/
-
+*/
+}
