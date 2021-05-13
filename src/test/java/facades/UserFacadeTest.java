@@ -111,7 +111,7 @@ public class UserFacadeTest {
         String username = "";
         String password = "";
         User expResult = null;
-        User result = facade.registerUser(username, password);
+        User result = facade.registerUser(username, password,"","","");
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
