@@ -11,6 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import utils.InputSanitiser;
 
 /**
  *
@@ -117,7 +118,11 @@ public class PostFacade {
     
     public PostDTO addPost(PostDTO p1){
         EntityManager em = emf.createEntityManager();
-
+        InputSanitiser inputS = new InputSanitiser();
+        
+        String sanitisedInput = inputS.sanitiser(p1.getContent());
+        p1.setContent(sanitisedInput);
+        
         em.getTransaction().begin();
         Post p = new Post(p1);
         
