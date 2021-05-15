@@ -99,6 +99,7 @@ public class PostFacade {
         em.getTransaction().commit();
         return "Edited the post";
     }
+    
     public String editForUser(PostDTO p1,String username){
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
@@ -113,6 +114,7 @@ public class PostFacade {
         return "You cant delete other peoples post you nophead";    
         }
     }
+    
     public PostDTO addPost(PostDTO p1){
         EntityManager em = emf.createEntityManager();
 
@@ -125,12 +127,7 @@ public class PostFacade {
         return p1;
     }
     
-    public static void main(String[] args) {
 
-        
-        
-    }
-    
     public PostsDTO getAllPosts() {
         EntityManager em = emf.createEntityManager();
 

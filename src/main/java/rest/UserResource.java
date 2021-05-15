@@ -299,7 +299,7 @@ public class UserResource {
 	public final String SECRET = "6LcIFdAaAAAAAK_Iv5yhQXxqxxQhnESAHCS7UYr9";
 	private final static String USER_AGENT = "Mozilla/5.0";
 
-	private boolean verify(String gRecaptchaResponse) throws IOException {
+	public boolean verify(String gRecaptchaResponse) throws IOException {
 		if (gRecaptchaResponse == null || "".equals(gRecaptchaResponse)) {
 			return false;
 		}

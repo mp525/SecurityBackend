@@ -10,6 +10,7 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import dto.UserDTO;
 import facades.UserFacade;
 import java.util.Date;
 import java.util.List;
@@ -24,12 +25,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import security.errorhandling.AuthenticationException;
 import errorhandling.GenericExceptionMapper;
+import java.io.IOException;
 import javax.persistence.EntityManagerFactory;
+import rest.UserResource;
 import utils.EMF_Creator;
 
 @Path("login")
 public class LoginEndpoint {
 
+  UserResource ur= new UserResource();
   public static final int TOKEN_EXPIRE_TIME = 1000 * 60 * 30; //30 min
   private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
   public static final UserFacade USER_FACADE = UserFacade.getUserFacade(EMF);
@@ -37,11 +41,17 @@ public class LoginEndpoint {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response login(String jsonString) throws AuthenticationException {
+  public Response login(String jsonString) throws AuthenticationException, IOException {
+        UserResource ur= new UserResource();
+       
     JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
     String username = json.get("username").getAsString();
     String password = json.get("password").getAsString();
-
+    String token2 = json.get("token").getAsString();
+      System.out.println(token2);
+    boolean human=ur.verify(token2);
+    if(human){
+      System.out.println(human);
     try {
       User user = USER_FACADE.getVeryfiedUser(username, password);
       String token = createToken(username, user.getRolesAsStrings());
@@ -57,8 +67,11 @@ public class LoginEndpoint {
       Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, null, ex);
     }
     throw new AuthenticationException("Invalid username or password! Please try again");
+   
+    }
+      throw new AuthenticationException("Robot");
+      
   }
-
   private String createToken(String userName, List<String> roles) throws JOSEException {
 
     StringBuilder res = new StringBuilder();
@@ -84,4 +97,5 @@ public class LoginEndpoint {
     return signedJWT.serialize();
 
   }
+
 }
