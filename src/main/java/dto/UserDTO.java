@@ -22,6 +22,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String password;
+    private String token;
     //private String userPass;
 
 
@@ -67,6 +68,10 @@ public class UserDTO {
 
     public UserDTO() {
 
+    }
+
+    public String getToken() {
+        return token;
     }
 
     
@@ -160,4 +165,9 @@ public class UserDTO {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "UserDTO{" + "userName=" + userName + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", token=" + token + '}';
+    }
+        
 }

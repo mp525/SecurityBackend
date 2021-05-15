@@ -2,21 +2,31 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import com.nimbusds.jose.JOSEException;
 import dto.PostDTO;
 import dto.UserDTO;
 import dto.PostsDTO;
+import dto.RecaptchaDTO;
 import entities.User;
 import facades.PostFacade;
 import facades.UserFacade;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.StringReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
+import javax.json.Json;
+import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -36,6 +46,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
+import utils.HttpUtils;
 
 /**
  * @author lam@cphbusiness.dk
@@ -106,10 +117,11 @@ public class UserResource {
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("allUserPosts/{userName}")
+    @Path("allUserPosts")
     @RolesAllowed("user")
-    public String getPosts(@PathParam("userName")String userName) {
-        List<PostDTO> p= postFacade.getAllButWithDateFirst(userName);
+    public String getPosts() {
+        String name = securityContext.getUserPrincipal().getName();
+        List<PostDTO> p= postFacade.getAllButWithDateFirst(name);
         return GSON.toJson(p);
     }
     
@@ -179,15 +191,20 @@ public class UserResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     @RolesAllowed("user")
-    public String addPost(String post) {
+    public String addPost(String post) throws IOException {
+        UserResource ur = new UserResource();
         PostDTO p = GSON.fromJson(post, PostDTO.class);
+        boolean human=ur.verify(p.getUser().getToken());
+        if(human){
         //ide indtil videre
-        String name =securityContext.getUserPrincipal().getName();
+        String name = securityContext.getUserPrincipal().getName();
         p.getUser().setUserName(name);
         //Virker det mon sikkerhedsmæssigt
         PostDTO result=postFacade.addPost(p);
         return GSON.toJson(result);
-        
+        }else{
+            throw new Error("Robo got hit by the Robocop");
+        }
     }
     
     
@@ -222,8 +239,13 @@ public class UserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String registerUser(String givenUser) throws AuthenticationException, JOSEException {
+    public String registerUser(String givenUser) throws AuthenticationException, JOSEException, IOException {
+        UserResource ur= new UserResource();
+       
         UserDTO dto = GSON.fromJson(givenUser, UserDTO.class);
+        System.out.println(dto.getToken());
+        boolean human=ur.verify(dto.getToken());
+        if(human){
         String username = dto.getUserName();
         String password = dto.getPassword();
         String firstName=dto.getFirstName();
@@ -266,9 +288,53 @@ public class UserResource {
 //                return "{\"msg\": \"User " + username + " registered\"}";
 //            }
         }
+        }
         //json = GSON.toJson("{\"msg\": \"Action could not be executed. Something went wrong.\"}");
         //return "{\"msg\": \"Action could not be executed. Something went wrong.\"}";
         //throw new AuthenticationException("Invalid username or password! Please try again");
+        return ""+human;
     }
+    
+    public final String url = "https://www.google.com/recaptcha/api/siteverify";
+	public final String SECRET = "6LcIFdAaAAAAAK_Iv5yhQXxqxxQhnESAHCS7UYr9";
+	private final static String USER_AGENT = "Mozilla/5.0";
 
+	private boolean verify(String gRecaptchaResponse) throws IOException {
+		if (gRecaptchaResponse == null || "".equals(gRecaptchaResponse)) {
+			return false;
+		}
+		try{
+		URL obj = new URL(url);
+		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+		// add reuqest header
+		con.setRequestMethod("POST");
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+		String postParams = "secret=" + SECRET + "&response="
+				+ gRecaptchaResponse;
+		// Send post request
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.writeBytes(postParams);
+		wr.flush();
+		wr.close();
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();		
+		//parse JSON response and return 'success' value
+		    javax.json.JsonReader jsonReader = Json.createReader(new StringReader(response.toString()));
+		    javax.json.JsonObject jsonObject = jsonReader.readObject();
+		jsonReader.close();
+		
+		return jsonObject.getBoolean("success");
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
