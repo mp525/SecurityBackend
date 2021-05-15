@@ -192,19 +192,12 @@ public class UserResource {
     @Consumes({MediaType.APPLICATION_JSON})
     @RolesAllowed("user")
     public String addPost(String post) throws IOException {
-        UserResource ur = new UserResource();
         PostDTO p = GSON.fromJson(post, PostDTO.class);
-        boolean human=ur.verify(p.getUser().getToken());
-        if(human){
-        //ide indtil videre
         String name = securityContext.getUserPrincipal().getName();
         p.getUser().setUserName(name);
-        //Virker det mon sikkerhedsmæssigt
         PostDTO result=postFacade.addPost(p);
         return GSON.toJson(result);
-        }else{
-            throw new Error("Robo got hit by the Robocop");
-        }
+        
     }
     
     
