@@ -44,8 +44,8 @@ public class PostFacade {
           List<PostDTO> list = new ArrayList();
         EntityManager em = emf.createEntityManager();
 
-        TypedQuery query = em.createQuery("SELECT p FROM Post p WHERE p.user.userName LIKE :user ORDER BY p.posted DESC", Post.class);
-        query.setParameter("user", "%" + username + "%");
+        TypedQuery query = em.createQuery("SELECT p FROM Post p WHERE p.user.userName = :user ORDER BY p.posted DESC", Post.class);
+        query.setParameter("user", username);
         List<Post> posts = query.getResultList();
 
         if (!(posts.isEmpty())) {

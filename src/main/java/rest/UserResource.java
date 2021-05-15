@@ -117,10 +117,11 @@ public class UserResource {
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("allUserPosts/{userName}")
+    @Path("allUserPosts")
     @RolesAllowed("user")
-    public String getPosts(@PathParam("userName")String userName) {
-        List<PostDTO> p= postFacade.getAllButWithDateFirst(userName);
+    public String getPosts() {
+        String name = securityContext.getUserPrincipal().getName();
+        List<PostDTO> p= postFacade.getAllButWithDateFirst(name);
         return GSON.toJson(p);
     }
     
