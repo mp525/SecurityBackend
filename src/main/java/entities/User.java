@@ -38,6 +38,9 @@ public class User implements Serializable {
   
   @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
   private List<Post> posts;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+  private List<Picture> pictures;
   
   
   

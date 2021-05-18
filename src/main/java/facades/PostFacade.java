@@ -1,7 +1,9 @@
 package facades;
 
+import dto.PictureDTO;
 import dto.PostDTO;
 import dto.PostsDTO;
+import entities.Picture;
 import entities.Post;
 import entities.User;
 import java.util.ArrayList;
@@ -38,9 +40,9 @@ public class PostFacade {
         }
         return instance;
     }
-    
-   
-    
+
+
+
     public List<PostDTO> getAllButWithDateFirst(String username){
           List<PostDTO> list = new ArrayList();
         EntityManager em = emf.createEntityManager();
@@ -55,7 +57,7 @@ public class PostFacade {
             }
         }
         return list;
-        
+
     }
     
     public String delete(int id){
@@ -115,19 +117,19 @@ public class PostFacade {
         return "You cant delete other peoples post you nophead";    
         }
     }
-    
+
     public PostDTO addPost(PostDTO p1){
         EntityManager em = emf.createEntityManager();
         InputSanitiser inputS = new InputSanitiser();
-        
+
         String sanitisedInput = inputS.sanitiser(p1.getContent());
         p1.setContent(sanitisedInput);
-        
+
         em.getTransaction().begin();
         Post p = new Post(p1);
-        
+
         em.persist(p);
-        
+
         em.getTransaction().commit();
         return p1;
     }
@@ -146,9 +148,41 @@ public class PostFacade {
         }
 
     }
-    
-    
 
-    
+//TODO Pictures
+    public PictureDTO addPicture(PictureDTO p1){
+        EntityManager em = emf.createEntityManager();
+        InputSanitiser inputS = new InputSanitiser();
 
+
+        //TODO muligt at sanitseren kan skabe issues med base64 encryption
+        String sanitisedInput = inputS.sanitiser(p1.getContent());
+        p1.setContent(sanitisedInput);
+
+        em.getTransaction().begin();
+        Picture p = new Picture(p1);
+
+        em.persist(p);
+
+        em.getTransaction().commit();
+        return p1;
+    }
+
+    public List<PictureDTO> getAllUserPicturesByDate(String username){
+        List<PictureDTO> list = new ArrayList();
+        EntityManager em = emf.createEntityManager();
+
+        TypedQuery query = em.createQuery("SELECT p FROM Picture p WHERE p.user.userName = :user ORDER BY p.posted DESC", Picture.class);
+        query.setParameter("user", username);
+        List<Picture> pictures = query.getResultList();
+
+        if (!(pictures.isEmpty())) {
+            for (Picture p1 : pictures) {
+                list.add(new PictureDTO(p1));
+            }
+        }
+        return list;
+
+
+    }
 }

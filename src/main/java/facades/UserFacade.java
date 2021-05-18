@@ -1,17 +1,12 @@
 package facades;
 
-import dto.PostDTO;
-import dto.PostsDTO;
 import dto.UserDTO;
 import static dto.UserDTO.toDTO;
-import entities.Post;
 import entities.Role;
 import entities.User;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import security.errorhandling.AuthenticationException;
 
