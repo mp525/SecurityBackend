@@ -112,7 +112,7 @@ public class PostFacade {
         return "Edited the post";
         
         }else{
-        return "You cant delete other peoples post you nophead";    
+        return "You cant edit other peoples post you nophead";    
         }
     }
     
