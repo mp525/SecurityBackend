@@ -80,6 +80,18 @@ public class InputSanitiser {
             int index = str.indexOf("%3B");
             String sanitised = str.substring(0, index);
             return sanitised;
+        } else if(str.contains("<scri")) {
+            int index = str.indexOf("<scri");
+            String sanitised = str.substring(0, index);
+            return sanitised;
+        } else if(str.contains("<xml")) {
+            int index = str.indexOf("<xml");
+            String sanitised = str.substring(0, index);
+            return sanitised;
+        } else if(str.contains("<?=")) {
+            int index = str.indexOf("<?=");
+            String sanitised = str.substring(0, index);
+            return sanitised;
         } else {
             return str;
         }

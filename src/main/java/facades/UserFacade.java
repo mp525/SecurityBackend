@@ -14,6 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import security.errorhandling.AuthenticationException;
+import utils.InputSanitiser;
 
 /**
  * @author lam@cphbusiness.dk
@@ -41,9 +42,11 @@ public class UserFacade {
 
     public User getVeryfiedUser(String username, String password) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();
+        InputSanitiser inputS = new InputSanitiser();
+        String sanitised = inputS.sanitiser(username);
         User user;
         try {
-            user = em.find(User.class, username);
+            user = em.find(User.class, sanitised);
             if (user == null || !user.verifyPassword(password)) {
                 throw new AuthenticationException("Invalid user name or password");
             }
@@ -108,11 +111,16 @@ public class UserFacade {
     
     public User registerUser(String username, String password,String email,String firstName,String lastName) {
         EntityManager em = emf.createEntityManager();
+        InputSanitiser inputS = new InputSanitiser();
         User user;
         Role userRole = new Role("user");
         try {
             em.getTransaction().begin();
-            user = new User(username, password,email,firstName,lastName);
+            String cUsername = inputS.sanitiser(username);
+            String cFName = inputS.sanitiser(firstName);
+            String cLName = inputS.sanitiser(lastName);
+            String cEmail = inputS.sanitiser(email);
+            user = new User(cUsername, password, cEmail, cFName, cLName);
             user.addRole(userRole);
             em.persist(user);
             em.getTransaction().commit();
