@@ -6,7 +6,14 @@ package utils;
  */
 public class InputSanitiser {
     /**
-     * -- -
+     * Sanitiser til strings. Tjekker for sql kode der potentielt kan skade databasen ved eksekvering.
+     * @param str Teksten fra opslaget i String format.
+     * @return saniteret string.
+     */
+    public String sanitiser(String str) {
+        /*
+        Bad stuff:
+        -- -
     '1' = '1
     1=1
     or ''='
@@ -17,9 +24,7 @@ public class InputSanitiser {
     drop table
     %00
     ';' or %3B
-     */
-    public String sanitiser(String str) {
-        /*
+        
         Fjern sql kode fra content trin:
         Tjek om sql kode er der
         Find start og slut index
