@@ -113,8 +113,10 @@ public class PostFacade {
             em.getTransaction().commit();
             return "Edited the post";
         
-        } else {
-            return "You cant delete other peoples post you nophead";    
+
+        }else{
+        return "You cant edit other peoples post you nophead";    
+
         }
     }
     
