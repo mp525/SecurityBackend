@@ -29,6 +29,7 @@ import java.io.IOException;
 import javax.persistence.EntityManagerFactory;
 import rest.UserResource;
 import utils.EMF_Creator;
+import utils.LogToFile;
 
 @Path("login")
 public class LoginEndpoint {
@@ -43,7 +44,7 @@ public class LoginEndpoint {
   @Produces(MediaType.APPLICATION_JSON)
   public Response login(String jsonString) throws AuthenticationException, IOException {
         UserResource ur= new UserResource();
-       
+       LogToFile ltf= new LogToFile();
     JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
     String username = json.get("username").getAsString();
     String password = json.get("password").getAsString();
@@ -56,12 +57,15 @@ public class LoginEndpoint {
       User user = USER_FACADE.getVeryfiedUser(username, password);
       String token = createToken(username, user.getRolesAsStrings());
       JsonObject responseJson = new JsonObject();
+      
       responseJson.addProperty("username", username);
       responseJson.addProperty("token", token);
+      ltf.logAdmin( "Login",username);
       return Response.ok(new Gson().toJson(responseJson)).build();
 
     } catch (JOSEException | AuthenticationException ex) {
       if (ex instanceof AuthenticationException) {
+           ltf.logAdmin("Login fail",username);
         throw (AuthenticationException) ex;
       }
       Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,6 +73,8 @@ public class LoginEndpoint {
     throw new AuthenticationException("Invalid username or password! Please try again");
    
     }
+    
+        ltf.logAdmin("Login failed: u is robot",username);
       throw new AuthenticationException("Robot");
       
   }
