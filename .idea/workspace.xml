@@ -11,12 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e08d2eeb-eab8-489c-a23b-d5aae8293eb8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dto/PictureDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/entities/Picture.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/rest/FileResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facades/PostFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facades/PostFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facades/UserFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facades/UserFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/entities/Picture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entities/Picture.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/rest/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/rest/ApplicationConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,17 +64,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Tomcat 9.0.40" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.40" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="BROWSER_ID" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
       <option name="UPDATING_POLICY" value="restart-server" />
@@ -187,6 +173,11 @@
       <workItem from="1620803536586" duration="8943000" />
       <workItem from="1621073707617" duration="2000" />
       <workItem from="1621299353742" duration="3250000" />
+      <workItem from="1621366568915" duration="1270000" />
+      <workItem from="1621413395677" duration="1737000" />
+      <workItem from="1621679153912" duration="8173000" />
+      <workItem from="1621949601540" duration="15083000" />
+      <workItem from="1622003354489" duration="857000" />
     </task>
     <servers />
   </component>
@@ -204,5 +195,26 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/rest/UserResource.java</url>
+          <line>194</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/rest/FileResource.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/rest/FileResource.java</url>
+          <line>47</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
