@@ -105,16 +105,20 @@ public class PostFacade {
     
     public String editForUser(PostDTO p1,String username){
         EntityManager em = emf.createEntityManager();
+        InputSanitiser inputS = new InputSanitiser();
         em.getTransaction().begin();
         Post p= em.find(Post.class, p1.getId()); 
         if(p.getUser().getUserName().equals(username)){
-         p.setContent(p1.getContent());
-        em.persist(p);
-        em.getTransaction().commit();
-        return "Edited the post";
+            String sanitised = inputS.sanitiser(p1.getContent());
+            p.setContent(sanitised);
+            em.persist(p);
+            em.getTransaction().commit();
+            return "Edited the post";
         
+
         }else{
-        return "You cant delete other peoples post you nophead";    
+        return "You cant edit other peoples post you nophead";    
+
         }
     }
 
